@@ -1,0 +1,38 @@
+# Based on https://github.com/heim-rs/heim/blob/master/.github/workflows/ci.yml
+
+on: [push, pull_request]
+name: Continuous integration
+
+jobs:
+  compile:
+    name: ${{ matrix.targets.target }}
+    runs-on: ${{ matrix.targets.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        targets:
+          - { os: 'ubuntu-latest',  target: 'x86_64-unknown-linux-gnu' }
+          - { os: 'macOS-latest',   target: 'x86_64-apple-darwin' }
+          - { os: 'windows-latest', target: 'x86_64-pc-windows-msvc' }
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --target=${{ matrix.targets.target }} --release
+          use-cross: false
+
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          path: target/scrapone*
