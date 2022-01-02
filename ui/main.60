@@ -1,0 +1,39 @@
+import { LineEdit, Button } from "sixtyfps_widgets.60";
+
+MainWindow := Window {
+    width: 400px;
+    height: 300px;
+
+    VerticalLayout {
+        alignment: start;
+        padding: 12px;
+        spacing: 16px;
+
+        // Query url
+        VerticalLayout {
+            alignment: start;
+            spacing: 6px;
+    
+            LineEdit {
+                placeholder-text: "Query url";
+            }
+        
+            HorizontalLayout {
+                spacing: 6px;
+    
+                Button {
+                    text: "Add query";
+                }
+                Button {
+                    text: "Add page num";
+                }
+            }
+        }
+
+        // XPath
+        VerticalLayout {
+            alignment: start;
+            spacing: 6px;
+        }
+    }
+}

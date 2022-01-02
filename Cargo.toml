@@ -1,0 +1,11 @@
+[package]
+name = "scrapone"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sixtyfps = "0.1.5"
+sxd-xpath = "0.4.2"
+
+[build-dependencies]
+sixtyfps-build = "0.1.5"
