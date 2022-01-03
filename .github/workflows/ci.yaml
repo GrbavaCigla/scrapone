@@ -39,4 +39,5 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
+          name: ${{ matrix.targets.os }}-scrapone${{ matrix.targets.suffix }}
           path: target/${{ matrix.targets.target }}/release/scrapone${{ matrix.targets.suffix }}
