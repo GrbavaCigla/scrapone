@@ -1,20 +1,29 @@
-import { LineEdit, Button } from "sixtyfps_widgets.60";
+import { LineEdit, Button, ListView } from "sixtyfps_widgets.60";
+
+export struct Field := {
+    name: string,
+    xpath: string,
+}
 
 MainWindow := Window {
     width: 400px;
     height: 300px;
 
+    callback field-added(Field);
+    callback run();
+
+    property <[Field]> field-models: [];
+
     VerticalLayout {
-        alignment: start;
         padding: 12px;
         spacing: 16px;
 
-        // Query url
         VerticalLayout {
+            vertical-stretch: 0;
             alignment: start;
             spacing: 6px;
     
-            LineEdit {
+            query-edit := LineEdit {
                 placeholder-text: "Query url";
             }
         
@@ -23,17 +32,66 @@ MainWindow := Window {
     
                 Button {
                     text: "Add query";
+                    clicked => {
+                        query-edit.text += "{{ query }}"
+                    }
                 }
                 Button {
                     text: "Add page num";
+                    clicked => {
+                        query-edit.text += "{{ page_num }}"
+                    }
                 }
             }
         }
 
-        // XPath
         VerticalLayout {
-            alignment: start;
+            vertical-stretch: 1;
+            alignment: stretch;
             spacing: 6px;
+
+            ListView {
+                vertical-stretch: 1;
+
+                for field in field-models: Text {
+                    text: field.name + ": " + field.xpath;
+                }
+            }
+
+            HorizontalLayout {
+                vertical-stretch: 0;
+                spacing: 6px;
+    
+                field-name := LineEdit {
+                    horizontal-stretch: 0;
+                    placeholder-text: "Field name";
+                }
+
+                field-xpath := LineEdit {
+                    horizontal-stretch: 1;
+                    placeholder-text: "XPath";
+                }
+
+                Button {
+                    horizontal-stretch: 0;
+                    enabled: field-name.text != "" && field-xpath.text != "";
+                    text: "Add field";
+                    clicked => {
+                        field-added({name: field-name.text, xpath: field-xpath.text});
+                        field-name.text = "";
+                        field-xpath.text = "";
+                    }
+                }
+            }
+        }
+
+        HorizontalLayout {
+            alignment: end;
+
+            Button {
+                enabled: field-models.length != 0;
+                text: "Run";
+            }
         }
     }
 }
